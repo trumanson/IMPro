@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.1.2.min.js"></script>
+    <script type="text/javascript" src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.connection.testHub.client.onMessage = function (msg) {
+                alert("消息来了" + msg);
+            };
+
+            $.connection.hub.start().done(function () {
+                alert("连接TestHub成功");
+            }).fail(function () {
+                alert("连接TestHub失败");
+            });
+
+            $.connection.testHub.client.onGlobalException = function (msg) {
+                alert(msg);
+            }
+
+            $("#btn1").click(function () {
+                //$.connection.testHub.server.sendMessage("sunzz", "Hello");
+                $.connection.testHub.server.hello().done(function (res) {
+                    alert(res.Name);
+                }).fail(function (res) {
+                    alert(res);
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div>
+        <input type="button" id="btn1" value="发送消息" />
+    </div>
+</body>
+</html>
